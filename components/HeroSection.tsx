@@ -40,7 +40,7 @@ const HeroSection = () => {
             >
               <div className="inline-block px-4 py-2 bg-[#800000]/65 rounded-full text-white mb-4">
                 <span className="mr-2">⭐</span>
-                Trusted by 1,00,000 + Patients
+                Trusted by 1,00,000+ Patients
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#800000] leading-tight"> {/* Changed text color to match header */}
