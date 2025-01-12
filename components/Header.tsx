@@ -18,7 +18,7 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navItems = ['Home', 'Our Doctor', 'About', 'Book Appointment', 'Blog', 'Contact']
+  const navItems = ['Home', 'Our Doctor', 'About', 'Blog', 'Contact', 'Book Appointment']
 
   return (
     <motion.header
@@ -39,52 +39,80 @@ const Header = () => {
             className="h-auto w-full"
           />
         </Link>
-        <nav className="hidden lg:flex space-x-6">
+        <nav className="hidden lg:flex space-x-6 items-center">
           {navItems.map((item) => (
-            <Link
-              key={item}
-              href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
-              className="text-[#800000]/70 hover:text-[#FFA500] transition-colors font-semibold"
-            >
-              {item}
-            </Link>
+            item === 'Book Appointment' ? (
+              <motion.div
+                key={item}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link
+                  href="/book-appointment"
+                  className="px-6 py-3 bg-[#800000]/80 text-white rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                >
+                  {item}
+                </Link>
+              </motion.div>
+            ) : (
+              <Link
+                key={item}
+                href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
+                className="text-[#800000]/70 hover:text-[#FFA500] transition-colors font-semibold"
+              >
+                {item}
+              </Link>
+            )
           ))}
         </nav>
-        <button
-          className="lg:hidden text-[#800000] focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </button>
+        <div className="lg:hidden flex items-center">
+          <button
+            className="text-[#800000] focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
       </div>
 
-      {isOpen && (
-        <motion.nav
-          className="fixed top-0 left-0 w-full h-screen bg-[#800000] text-white flex flex-col items-center justify-center space-y-6 p-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+       {/* Dropdown Menu */}
+       {isOpen && (
+        <motion.div
+          className="fixed top-[60px] left-0 w-full h-[calc(100vh-60px)] bg-gray-50 z-40 overflow-y-auto shadow-lg"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Close Button */}
-          <button
-            className="absolute top-4 right-4 p-2 bg-white text-[#800000] rounded-full shadow-md hover:bg-[#FFA500] hover:text-white transition-all"
-            onClick={() => setIsOpen(false)}
-          >
-            <FiX size={24} />
-          </button>
-
-          {/* Navigation Items */}
-          {navItems.map((item) => (
-            <Link
-              key={item}
-              href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
-              className="text-2xl font-semibold hover:text-[#FFA500] transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {item}
-            </Link>
-          ))}
-        </motion.nav>
+          <div className="container mx-auto p-6 space-y-6">
+            {navItems.map((item) =>
+              item === 'Book Appointment' ? (
+                <motion.div
+                  key={item}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link
+                    href="/book-appointment"
+                    className="block w-full px-6 py-3 bg-[#800000]/80 text-white text-center rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                </motion.div>
+              ) : (
+                <Link
+                  key={item}
+                  href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
+                  className="block text-lg font-semibold text-[#800000] hover:text-[#FFA500] text-center transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item}
+                </Link>
+              )
+            )}
+          </div>
+        </motion.div>
       )}
     </motion.header>
   )

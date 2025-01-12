@@ -1,11 +1,13 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import Header from "../../components/Header"
-import Footer from "../../components/Footer"
-import { motion } from 'framer-motion'
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { Calendar, Clock, User, Phone, Mail, MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
 
 export default function BookAppointment() {
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,156 +15,306 @@ export default function BookAppointment() {
     date: '',
     time: '',
     reason: ''
-  })
+  });
+  
+  const [errors, setErrors] = useState({});
+  const [isSuccess, setIsSuccess] = useState(false); // Success state
 
   const availableTimes = [
     '09:00 AM', '10:00 AM', '11:00 AM',
     '12:00 PM', '02:00 PM', '03:00 PM',
-    '04:00 PM', '05:00 PM'
-  ]
+    '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM'
+  ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log('Appointment form submitted:', formData)
-    // Handle form submission logic here
-  }
+  const validateStep = () => {
+    const newErrors = {};
+    if (step === 1) {
+      if (!formData.name.trim()) newErrors.name = 'Name is required.';
+      if (!formData.email.trim()) {
+        newErrors.email = 'Email is required.';
+      } else if (!/^[\w-.]+@[\w-]+\.[a-zA-Z]{2,7}$/.test(formData.email)) {
+        newErrors.email = 'Enter a valid email.';
+      }
+      if (!formData.phone.trim()) {
+        newErrors.phone = 'Phone number is required.';
+      } else if (!/^\d{10}$/.test(formData.phone)) {
+        newErrors.phone = 'Enter a valid 10-digit phone number.';
+      }
+    }
+
+    if (step === 2) {
+      if (!formData.date.trim()) newErrors.date = 'Date is required.';
+      if (!formData.time.trim()) newErrors.time = 'Time is required.';
+    }
+
+    if (step === 3) {
+      if (!formData.reason.trim()) newErrors.reason = 'Reason is required.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const nextStep = () => {
+    if (validateStep()) setStep((prev) => prev + 1);
+  };
+
+  const prevStep = () => setStep((prev) => prev - 1);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateStep()) {
+      // Formsubmit action URL
+      const formActionURL = 'https://formsubmit.co/aryan.456.as@gmail.com'; // Replace with your email
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('date', formData.date);
+      formDataToSend.append('time', formData.time);
+      formDataToSend.append('reason', formData.reason);
+
+      // Use fetch to send the data to Formsubmit
+      fetch(formActionURL, {
+        method: 'POST',
+        body: formDataToSend,
+      })
+        .then((response) => {
+          if (response.ok) {
+            setIsSuccess(true);
+            setFormData({
+              name: '',
+              email: '',
+              phone: '',
+              date: '',
+              time: '',
+              reason: ''
+            });
+          } else {
+            alert('There was an error. Please try again.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert('There was an error. Please try again.');
+        });
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gray-50">
       <Header />
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4">
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold text-center text-[#800000] mb-12"
-            initial={{ opacity: 0, y: -20 }}
+          <motion.div
+            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Book an Appointment
-          </motion.h1>
-          <motion.div
-            className="max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2" htmlFor="name">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2" htmlFor="phone">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2" htmlFor="date">
-                    Preferred Date
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                    required
-                    min={new Date().toISOString().split('T')[0]}
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2" htmlFor="time">
-                    Preferred Time
-                  </label>
-                  <select
-                    id="time"
-                    name="time"
-                    value={formData.time}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                    required
+            {/* Progress Bar */}
+            <div className="mb-12">
+              <div className="flex justify-between items-center max-w-xs mx-auto">
+                {[1, 2, 3].map((num) => (
+                  <motion.div
+                    key={num}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                      step >= num ? 'bg-[#800000] text-white' : 'bg-gray-200 text-gray-600'
+                    }`}
+                    initial={false}
+                    animate={step >= num ? { scale: [1, 1.2, 1] } : {}}
                   >
-                    <option value="">Select a time</option>
-                    {availableTimes.map((time) => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-gray-700 font-semibold mb-2" htmlFor="reason">
-                    Reason for Visit
-                  </label>
-                  <textarea
-                    id="reason"
-                    name="reason"
-                    value={formData.reason}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                    rows={4}
-                    required
-                  ></textarea>
-                </div>
+                    {num}
+                  </motion.div>
+                ))}
               </div>
-              <div className="mt-8 text-center">
-                <motion.button
-                  type="submit"
-                  className="bg-[#800000] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#FFA500] transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Schedule Appointment
-                </motion.button>
+              <div className="h-1 bg-gray-200 mt-4 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-[#800000]"
+                  initial={{ width: '0%' }}
+                  animate={{ width: `${((step - 1) / 2) * 100}%` }}
+                  transition={{ duration: 0.3 }}
+                />
               </div>
-            </form>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-xl">
+              <form onSubmit={handleSubmit} noValidate>
+                <AnimatePresence mode="wait">
+                  {step === 1 && (
+                    <motion.div
+                      key="step1"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="space-y-6"
+                    >
+                      <h2 className="text-3xl font-bold text-[#800000] mb-8">Personal Information</h2>
+                      <div className="space-y-6">
+                        <div className="relative">
+                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Full Name"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+                          />
+                          {errors.name && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.name}</p>}
+                        </div>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email Address"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+                          />
+                          {errors.email && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.email}</p>}
+                        </div>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="Phone Number"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+                          />
+                          {errors.phone && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.phone}</p>}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {step === 2 && (
+                    <motion.div
+                      key="step2"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="space-y-6"
+                    >
+                      <h2 className="text-3xl font-bold text-[#800000] mb-8">Appointment Details</h2>
+                      <div className="space-y-6">
+                        <div className="relative">
+                          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                          <input
+                            type="date"
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+                          />
+                          {errors.date && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.date}</p>}
+                        </div>
+                        <div className="relative">
+                          <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                          <select
+                            name="time"
+                            value={formData.time}
+                            onChange={handleChange}
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+                          >
+                            <option value="">Select Time</option>
+                            {availableTimes.map((time) => (
+                              <option key={time} value={time}>
+                                {time}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.time && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.time}</p>}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {step === 3 && (
+                    <motion.div
+                      key="step3"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="space-y-6"
+                    >
+                      <h2 className="text-3xl font-bold text-[#800000] mb-8">Reason for Appointment</h2>
+                      <div className="space-y-6">
+                        <div className="relative">
+                          <MessageSquare className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+                          <textarea
+                            name="reason"
+                            value={formData.reason}
+                            onChange={handleChange}
+                            placeholder="Describe the reason for your appointment"
+                            rows="4"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+                          />
+                          {errors.reason && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.reason}</p>}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Success message after form submission */}
+                  {isSuccess && (
+                    <motion.div
+                      key="success"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="space-y-6 text-center"
+                    >
+                      <h2 className="text-3xl font-bold text-green-600 mb-8">Appointment Submitted Successfully!</h2>
+                      <p className="text-lg">Thank you for scheduling an appointment. You will be contacted soon!</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="flex justify-center mt-8">
+                  {step > 1 && !isSuccess && (
+                    <button
+                      type="button"
+                      onClick={prevStep}
+                      className="px-6 py-3 bg-gray-200 rounded-full text-gray-700 text-sm font-semibold hover:bg-gray-300 transition-all"
+                    >
+                      <ChevronLeft className="inline-block mr-2" />
+                      Back
+                    </button>
+                  )}
+                  {step < 3 && !isSuccess && (
+                    <button
+                      type="button"
+                      onClick={nextStep}
+                      className="px-6 py-3 bg-[#800000] text-white rounded-full text-sm font-semibold hover:bg-[#b30000] transition-all"
+                    >
+                      Next
+                      <ChevronRight className="inline-block ml-2" />
+                    </button>
+                  )}
+                  {step === 3 && !isSuccess && (
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-[#800000] text-white rounded-full text-sm font-semibold hover:bg-[#b30000] transition-all"
+                    >
+                      Submit
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
           </motion.div>
         </div>
       </section>
       <Footer />
     </main>
-  )
+  );
 }
-

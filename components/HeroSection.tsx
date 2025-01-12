@@ -59,7 +59,7 @@ const HeroSection = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Book Consultation
+                    Book Appointment
                   </motion.button>
                 </Link>
                 <Link href="/our-doctor">

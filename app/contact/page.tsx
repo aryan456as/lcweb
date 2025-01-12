@@ -1,30 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { motion } from 'framer-motion'
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
-import { motion } from 'framer-motion'
+import { MapPin, Phone, Mail } from 'lucide-react'
+import LocationsSection from '@/components/LocationsSection'
+import Link from 'next/link'
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  })
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Handle form submission logic here
-  }
+  const clinics = [
+    {
+      name: "Clinic 1",
+      address: "Sai Plaza, First Floor, B-Block Chauraha, Indira Nagar, Lucknow UP, India, - 226016"
+    },
+    {
+      name: "Clinic 2",
+      address: "Shop No 1, Hotel Kunti International, Near SGPGI, Lucknow UP, India, 226014"
+    }
+  ]
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -32,88 +25,75 @@ export default function ContactPage() {
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4">
           <motion.h1
-            className="text-4xl md:text-5xl font-bold text-center text-[#800000] mb-12"
+            className="text-4xl md:text-5xl font-bold text-center text-[#800000] mb-16"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             Contact Us
           </motion.h1>
-          <motion.div
-            className="max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-8">
-              <div className="mb-6">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="name">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                  required
-                />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+            {/* Address Section */}
+            <motion.div
+              className="text-center space-y-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="w-20 h-20 bg-[#800000]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MapPin className="w-8 h-8 text-[#800000]" />
               </div>
-              <div className="mb-6">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                  required
-                />
+              <h2 className="text-xl font-semibold text-[#800000] mb-4">Our Locations</h2>
+              {clinics.map((clinic, index) => (
+                <div key={index} className="mb-6">
+                  <h3 className="font-semibold text-gray-800 mb-2">{clinic.name}</h3>
+                  <p className="text-gray-600">{clinic.address}</p>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Phone Section */}
+            <motion.div
+              className="text-center space-y-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="w-20 h-20 bg-[#800000]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Phone className="w-8 h-8 text-[#800000]" />
               </div>
-              <div className="mb-6">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="phone">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                  required
-                />
+              <h2 className="text-xl font-semibold text-[#800000] mb-4">Phone</h2>
+              <Link 
+                href="tel:8400065000"
+                className="text-lg text-gray-600 hover:text-[#800000] transition-colors"
+              >
+                +91-8400065000
+              </Link>
+            </motion.div>
+
+            {/* Email Section */}
+            <motion.div
+              className="text-center space-y-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <div className="w-20 h-20 bg-[#800000]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Mail className="w-8 h-8 text-[#800000]" />
               </div>
-              <div className="mb-6">
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="message">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#800000]"
-                  rows={5}
-                  required
-                ></textarea>
-              </div>
-              <div className="text-center">
-                <motion.button
-                  type="submit"
-                  className="bg-[#800000] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#FFA500] transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Send Message
-                </motion.button>
-              </div>
-            </form>
-          </motion.div>
+              <h2 className="text-xl font-semibold text-[#800000] mb-4">Email</h2>
+              <Link 
+                href="mailto:curemyliver@gmail.com"
+                className="text-lg text-gray-600 hover:text-[#800000] transition-colors"
+              >
+                curemyliver@gmail.com
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Map Section */}
+          <LocationsSection />
         </div>
       </section>
       <Footer />

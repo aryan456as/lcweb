@@ -46,7 +46,7 @@ const OurDoctorSection = () => {
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2">
               <Image
-                src="/doctor_image.jpg?height=400&width=400"
+                src="/doc_img.jpeg?height=400&width=400"
                 alt="Dr. Shailendra Singh"
                 width={400}
                 height={400}
