@@ -284,7 +284,7 @@ export default function BookAppointment() {
                       animate={{ opacity: 1 }}
                       className="space-y-6 text-center"
                     >
-                      <h2 className="text-3xl font-bold text-green-600 mb-8">Appointment Submitted Successfully!</h2>
+                      <h2 className="text-3xl font-bold text-[#FFA500] mb-8">Appointment Submitted Successfully!</h2>
                       <p className="text-lg">Thank you for scheduling an appointment. You will be contacted soon!</p>
                     </motion.div>
                   )}
