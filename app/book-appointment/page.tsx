@@ -214,10 +214,11 @@ export default function BookAppointment() {
     name="date"
     value={formData.date}
     onChange={handleChange}
-    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
   />
   {errors.date && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.date}</p>}
 </div>
+
 
 <div className="relative">
   <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
@@ -225,7 +226,7 @@ export default function BookAppointment() {
     name="time"
     value={formData.time}
     onChange={handleChange}
-    className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000] appearance-none"
+    className="w-full pl-12 pr-10 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000] appearance-none"
   >
     <option value="">Select Time</option>
     {availableTimes.map((time) => (
