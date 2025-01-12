@@ -67,8 +67,9 @@ export default function BookAppointment() {
 
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (validateStep()) {
       // Formsubmit action URL
       const formActionURL = 'https://formsubmit.co/aryan.456.as@gmail.com'; // Replace with your email
@@ -79,33 +80,35 @@ export default function BookAppointment() {
       formDataToSend.append('date', formData.date);
       formDataToSend.append('time', formData.time);
       formDataToSend.append('reason', formData.reason);
-
-      // Use fetch to send the data to Formsubmit
-      fetch(formActionURL, {
-        method: 'POST',
-        body: formDataToSend,
-      })
-        .then((response) => {
-          if (response.ok) {
-            setIsSuccess(true);
-            setFormData({
-              name: '',
-              email: '',
-              phone: '',
-              date: '',
-              time: '',
-              reason: ''
-            });
-          } else {
-            alert('There was an error. Please try again.');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert('There was an error. Please try again.');
+      formDataToSend.append('_captcha', 'false');
+  
+      try {
+        // Use await to send data to Formsubmit
+        const response = await fetch(formActionURL, {
+          method: 'POST',
+          body: formDataToSend,
         });
+  
+        if (response.ok) {
+          setIsSuccess(true);
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            date: '',
+            time: '',
+            reason: ''
+          });
+        } else {
+          alert('There was an error. Please try again.');
+        }
+      } catch (error) {
+        alert('There was an error. Please try again.');
+        console.error('Error in form submission:', error);
+      }
     }
   };
+  
 
   return (
     <main className="min-h-screen bg-gray-50">
