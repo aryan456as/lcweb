@@ -23,7 +23,7 @@ export default function OurDoctor() {
             <div className="md:flex">
               <div className="md:w-1/2">
                 <Image
-                  src="/doc_img.jpeg?height=600&width=450"
+                  src="/doc_img.png?height=600&width=450"
                   alt="Dr. Shailendra Singh"
                   width={450}
                   height={600}
