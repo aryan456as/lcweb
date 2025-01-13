@@ -1,13 +1,30 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { Calendar, Clock, User, Phone, Mail, MessageSquare, ChevronRight, ChevronLeft, ChevronDown } from 'lucide-react';
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
+const customDatePickerStyles = `
+  .react-datepicker-wrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .react-datepicker__input-container {
+    width: 100%;
+  }
+`
+
+
 
 export default function BookAppointment() {
   const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -71,6 +88,8 @@ export default function BookAppointment() {
     e.preventDefault();
   
     if (validateStep()) {
+      setIsLoading(true);  // Set loading to true when the submit is clicked
+
       // Formsubmit action URL
       const formActionURL = 'https://formsubmit.co/aryan.456.as@gmail.com'; // Replace with your email
       const formDataToSend = new FormData();
@@ -105,10 +124,22 @@ export default function BookAppointment() {
       } catch (error) {
         alert('There was an error. Please try again.');
         console.error('Error in form submission:', error);
+      }finally {
+        setIsLoading(false);  // Set loading to false after the process is done
       }
     }
   };
   
+
+  useEffect(() => {
+    const styleElement = document.createElement('style')
+    styleElement.textContent = customDatePickerStyles
+    document.head.appendChild(styleElement)
+
+    return () => {
+      document.head.removeChild(styleElement)
+    }
+  }, [])
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -208,19 +239,34 @@ export default function BookAppointment() {
                       exit={{ opacity: 0, x: -20 }}
                       className="space-y-6"
                     >
-                      <h2 className="text-3xl font-bold text-[#800000] mb-8">Appointment Details</h2>
+                    <h2 className="text-3xl font-bold text-[#800000] mb-8">Schedule Appointment</h2>
                       <div className="space-y-6">
                       <div className="relative">
-  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
-  <input
-    type="date"
-    name="date"
-    value={formData.date}
-    onChange={handleChange}
+  {/* Calendar Icon */}
+  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none z-10" style={{ height: '50%' }}>
+    <Calendar className="w-5 h-5" />
+  </div>
+
+  {/* Date Picker Input */}
+  <ReactDatePicker
+    selected={formData.date ? new Date(formData.date) : null}
+    onChange={(date) => setFormData({ ...formData, date: date ? date.toLocaleDateString('en-CA') : '' })}
     className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+    placeholderText="Select Date"
+    dateFormat="MMMM d, yyyy"
+    minDate={new Date()}
+    showPopperArrow={true}
+    autoComplete="off"
   />
-  {errors.date && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.date}</p>}
+
+  {/* Error Message */}
+  {errors.date && (
+    <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">
+      {errors.date}
+    </p>
+  )}
 </div>
+
 
 
 <div className="relative">
@@ -250,44 +296,45 @@ export default function BookAppointment() {
                     </motion.div>
                   )}
 
-                  {step === 3 && (
-                    <motion.div
-                      key="step3"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      className="space-y-6"
-                    >
-                      <h2 className="text-3xl font-bold text-[#800000] mb-8">Reason for Appointment</h2>
-                      <div className="space-y-6">
-                        <div className="relative">
-                          <MessageSquare className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
-                          <textarea
-                            name="reason"
-                            value={formData.reason}
-                            onChange={handleChange}
-                            placeholder="Describe the reason for your appointment"
-                            rows="4"
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
-                          />
-                          {errors.reason && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.reason}</p>}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
+{step === 3 && !isSuccess && (
+  <motion.div
+    key="step3"
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -20 }}
+    className="space-y-6"
+  >
+    <h2 className="text-3xl font-bold text-[#800000] mb-8">Reason for Appointment</h2>
+    <div className="space-y-6">
+      <div className="relative">
+        <MessageSquare className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
+        <textarea
+          name="reason"
+          value={formData.reason}
+          onChange={handleChange}
+          placeholder="Describe the reason for your appointment"
+          rows="4"
+          className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+        />
+        {errors.reason && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.reason}</p>}
+      </div>
+    </div>
+  </motion.div>
+)}
 
-                  {/* Success message after form submission */}
-                  {isSuccess && (
-                    <motion.div
-                      key="success"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="space-y-6 text-center"
-                    >
-                      <h2 className="text-3xl font-bold text-[#FFA500] mb-8">Appointment Submitted Successfully!</h2>
-                      <p className="text-lg">Thank you for scheduling an appointment. You will be contacted soon!</p>
-                    </motion.div>
-                  )}
+{/* Success message after form submission */}
+{isSuccess && (
+  <motion.div
+    key="success"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    className="space-y-6 text-center"
+  >
+    <h2 className="text-3xl font-bold text-[#FFA500] mb-8">Appointment Submitted Successfully!</h2>
+    <p className="text-lg">Thank you for scheduling an appointment. You will be contacted soon!</p>
+  </motion.div>
+)}
+
                 </AnimatePresence>
 
                 <div className="flex justify-center mt-8">
@@ -311,14 +358,20 @@ export default function BookAppointment() {
                       <ChevronRight className="inline-block ml-2" />
                     </button>
                   )}
-                  {step === 3 && !isSuccess && (
-                    <button
-                      type="submit"
-                      className="px-6 py-3 bg-[#800000] text-white rounded-full text-sm font-semibold hover:bg-[#b30000] transition-all"
-                    >
-                      Submit
-                    </button>
-                  )}
+                {step === 3 && !isSuccess && (
+  <button
+    type="submit"
+    className="px-8 py-3 bg-[#800000] text-white rounded-full text-sm font-semibold hover:bg-[#b30000] transition-all"
+    disabled={isLoading} // Disable button while loading
+  >
+    {isLoading ? (
+      <div className="spinner-border animate-spin border-t-2 border-b-2 border-white w-6 h-6 border-solid rounded-full"></div> // You can replace this with a spinner of your choice
+    ) : (
+      'Submit'
+    )}
+  </button>
+)}
+
                 </div>
               </form>
             </div>
