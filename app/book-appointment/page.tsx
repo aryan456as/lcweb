@@ -315,6 +315,13 @@ export default function BookAppointment() {
           placeholder="Describe the reason for your appointment"
           rows="4"
           className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
+          style={{
+            paddingTop: '5rem',
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+            boxSizing: 'border-box',
+          }}
         />
         {errors.reason && <p className="text-red-500 text-sm mt-1 absolute left-0 bottom-[-20px]">{errors.reason}</p>}
       </div>

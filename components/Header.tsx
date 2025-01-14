@@ -78,13 +78,13 @@ const Header = () => {
        {/* Dropdown Menu */}
        {isOpen && (
         <motion.div
-        className="fixed top-[50px] md:top-[60px] left-0 w-full h-[calc(100vh-50px)] md:h-[calc(100vh-60px)] bg-gray-50 z-40 overflow-y-auto shadow-lg"
+        className="fixed top-[50px] md:top-[60px] left-0 w-full h-[calc(100vh-50px)] md:h-[calc(100vh-60px)] bg-gray-50 z-40 flex items-center justify-center overflow-y-auto shadow-lg"
         initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="container mx-auto p-6 space-y-6">
+          <div className="container mx-auto  flex flex-col items-center space-y-6">
             {navItems.map((item) =>
               item === 'Book Appointment' ? (
                 <motion.div
@@ -94,7 +94,7 @@ const Header = () => {
                 >
                   <Link
                     href="/book-appointment"
-                    className="block w-full px-6 py-3 bg-[#800000]/80  hover:bg-[#FFA500] text-white text-center rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                    className="block w-full max-w-xs px-6 py-3 bg-[#800000]/80  hover:bg-[#FFA500] text-white text-center rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
                     onClick={() => setIsOpen(false)}
                   >
                     {item}
