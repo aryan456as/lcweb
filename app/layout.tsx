@@ -20,6 +20,7 @@ export default function RootLayout({
         {/* Metadata */}
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
+        <meta name="theme-color" content="#800000" />
 
         {/* Favicon */}
         <link rel="icon" href="/favicon-32x32.png" />
