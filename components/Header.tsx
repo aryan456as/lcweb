@@ -84,7 +84,7 @@ const Header = () => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="container mx-auto  flex flex-col items-center space-y-6">
+          <div className="container mx-auto flex flex-col items-center space-y-6 transform -translate-y-12">
             {navItems.map((item) =>
               item === 'Book Appointment' ? (
                 <motion.div
