@@ -7,6 +7,28 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/_next/static/:path*", // Match all static files served by Next.js
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable", // Cache for 1 year
+          },
+        ],
+      },
+      {
+        source: "/static/:path*", // Match custom static assets in the public/static folder
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable", // Cache for 1 year
+          },
+        ],
+      },
+    ];
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
