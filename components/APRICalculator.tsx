@@ -6,42 +6,21 @@ import { Activity, Calculator, RotateCcw, ShieldCheck } from 'lucide-react'
 const getInterpretation = (score: number) => {
   if (score < 0.5) {
     return {
-      label: 'Lower likelihood range',
-      detail: 'A score below 0.5 has greater ability to help rule out cirrhosis, but APRI alone cannot exclude significant liver disease.',
+      label: 'Low likelihood of liver fibrosis',
+      detail: 'An APRI score below 0.5 is associated with minimal or no fibrosis.',
     }
   }
 
-  if (score < 0.7) {
+  if (score <= 1.5) {
     return {
-      label: 'Intermediate range',
-      detail: 'This result is below the commonly cited 0.7 threshold for significant hepatic fibrosis. Clinical context and other tests still matter.',
-    }
-  }
-
-  if (score < 1) {
-    return {
-      label: 'Significant fibrosis threshold reached',
-      detail: 'Scores above 0.7 are associated with an increased likelihood of significant hepatic fibrosis in hepatitis C studies.',
-    }
-  }
-
-  if (score < 1.5) {
-    return {
-      label: 'Elevated APRI result',
-      detail: 'Scores above 1.0 are associated with an increased likelihood of cirrhosis, but this result is not diagnostic on its own.',
-    }
-  }
-
-  if (score < 2) {
-    return {
-      label: 'Higher likelihood range',
-      detail: 'Scores above 1.5 have a greater positive predictive value for cirrhosis. Confirmatory clinical assessment is important.',
+      label: 'Intermediate likelihood of liver fibrosis',
+      detail: 'An APRI score from 0.5 through 1.5 is associated with moderate fibrosis or significant fibrosis.',
     }
   }
 
   return {
-    label: 'High-specificity range',
-    detail: 'A cutoff of 2.0 is more specific for cirrhosis, but has limited sensitivity and should not be used as a diagnosis by itself.',
+    label: 'High likelihood of liver fibrosis',
+    detail: 'An APRI score above 1.5 is associated with severe fibrosis or cirrhosis.',
   }
 }
 
@@ -185,31 +164,31 @@ export default function APRICalculator() {
       </div>
 
       <div className="border-t border-gray-200 px-6 py-8 md:px-10">
-        <h3 className="text-xl font-bold text-[#800000]">Clinical interpretation landmarks</h3>
+        <h3 className="text-xl font-bold text-[#800000]">APRI score interpretation</h3>
         <div className="mt-5 overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="bg-gray-50 text-gray-700">
               <tr>
-                <th className="px-5 py-4 font-semibold">APRI cutoff</th>
-                <th className="px-5 py-4 font-semibold">Clinical association</th>
-                <th className="px-5 py-4 font-semibold">Published performance</th>
+                <th className="px-5 py-4 font-semibold">APRI score</th>
+                <th className="px-5 py-4 font-semibold">Interpretation</th>
+                <th className="px-5 py-4 font-semibold">Likelihood of liver fibrosis</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 text-gray-600">
               <tr>
-                <td className="px-5 py-4 font-bold text-gray-900">&gt; 0.7</td>
-                <td className="px-5 py-4">Significant hepatic fibrosis</td>
-                <td className="px-5 py-4">77% sensitivity, 72% specificity</td>
+                <td className="px-5 py-4 font-bold text-gray-900">&lt; 0.5</td>
+                <td className="px-5 py-4">Minimal or no fibrosis</td>
+                <td className="px-5 py-4">Low</td>
               </tr>
               <tr>
-                <td className="px-5 py-4 font-bold text-gray-900">&gt; 1.0</td>
-                <td className="px-5 py-4">Cirrhosis</td>
-                <td className="px-5 py-4">76% sensitivity, 72% specificity</td>
+                <td className="px-5 py-4 font-bold text-gray-900">0.5–1.5</td>
+                <td className="px-5 py-4">Moderate fibrosis or significant fibrosis</td>
+                <td className="px-5 py-4">Intermediate</td>
               </tr>
               <tr>
-                <td className="px-5 py-4 font-bold text-gray-900">≥ 2.0</td>
-                <td className="px-5 py-4">More specific cirrhosis cutoff</td>
-                <td className="px-5 py-4">46% sensitivity, 91% specificity</td>
+                <td className="px-5 py-4 font-bold text-gray-900">&gt; 1.5</td>
+                <td className="px-5 py-4">Severe fibrosis or cirrhosis</td>
+                <td className="px-5 py-4">High</td>
               </tr>
             </tbody>
           </table>
@@ -220,7 +199,7 @@ export default function APRICalculator() {
         </div>
 
         <p className="mt-6 text-sm leading-6 text-gray-500">
-          Clinical reference:{' '}
+          Formula and clinical background reference:{' '}
           <a
             href="https://www.hepatitisc.uw.edu/page/clinical-calculators/apri"
             target="_blank"
