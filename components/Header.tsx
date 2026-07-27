@@ -18,7 +18,7 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navItems = ['Home', 'Our Doctor', 'About', 'Blog', 'Contact', 'Book Appointment']
+  const navItems = ['Home', 'Our Doctor', 'About', 'Blog', 'Tools', 'Contact', 'Book Appointment']
 
   return (
     <motion.header

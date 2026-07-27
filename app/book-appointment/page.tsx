@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -19,6 +19,17 @@ const customDatePickerStyles = `
   }
 `
 
+type AppointmentData = {
+  name: string
+  email: string
+  phone: string
+  date: string
+  time: string
+  reason: string
+}
+
+type AppointmentErrors = Partial<Record<keyof AppointmentData, string>>
+
 
 
 export default function BookAppointment() {
@@ -34,7 +45,7 @@ export default function BookAppointment() {
     reason: ''
   });
   
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<AppointmentErrors>({});
   const [isSuccess, setIsSuccess] = useState(false); // Success state
 
   const availableTimes = [
@@ -43,14 +54,14 @@ export default function BookAppointment() {
     '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM'
   ];
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const validateStep = () => {
-    const newErrors = {};
+    const newErrors: AppointmentErrors = {};
     if (step === 1) {
       if (!formData.name.trim()) newErrors.name = 'Name is required.';
       if (!formData.email.trim()) {
@@ -67,6 +78,7 @@ export default function BookAppointment() {
 
     if (step === 2) {
       if (!formData.date.trim()) newErrors.date = 'Date is required.';
+      else if (new Date(`${formData.date}T00:00:00`).getDay() === 0) newErrors.date = 'The clinic is closed on Sundays.';
       if (!formData.time.trim()) newErrors.time = 'Time is required.';
     }
 
@@ -84,7 +96,7 @@ export default function BookAppointment() {
 
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
     if (validateStep()) {
@@ -249,12 +261,16 @@ export default function BookAppointment() {
 
   {/* Date Picker Input */}
   <ReactDatePicker
-    selected={formData.date ? new Date(formData.date) : null}
-    onChange={(date) => setFormData({ ...formData, date: date ? date.toLocaleDateString('en-CA') : '' })}
+    selected={formData.date ? new Date(`${formData.date}T00:00:00`) : null}
+    onChange={(date) => {
+      setFormData({ ...formData, date: date ? date.toLocaleDateString('en-CA') : '' })
+      setErrors((prev) => ({ ...prev, date: '' }))
+    }}
     className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
     placeholderText="Select Date"
     dateFormat="MMMM d, yyyy"
     minDate={new Date()}
+    filterDate={(date) => date.getDay() !== 0}
     showPopperArrow={true}
     autoComplete="off"
   />
@@ -313,7 +329,7 @@ export default function BookAppointment() {
           value={formData.reason}
           onChange={handleChange}
           placeholder="Describe the reason for your appointment"
-          rows="4"
+          rows={4}
           className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-[#800000] focus:ring-1 focus:ring-[#800000]"
           style={{
             paddingTop: '5rem',

@@ -1,12 +1,20 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
 import FloatingButtons from '../components/FloatingButtons'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'LiverCure - Homeopathy Health Centre for Liver',
   description: 'Your trusted healthcare provider for liver care through homeopathy',
+  icons: {
+    icon: '/favicon-32x32.png',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#800000',
 }
 
 export default function RootLayout({
@@ -16,15 +24,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        {/* Metadata */}
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <meta name="theme-color" content="#800000" />
-
-        {/* Favicon */}
-        <link rel="icon" href="/favicon-32x32.png" />
-      </head>
       <body className={inter.className}>
         {children}
         <FloatingButtons />

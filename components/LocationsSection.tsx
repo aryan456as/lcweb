@@ -8,11 +8,6 @@ const locations = [
     name: "Indira Nagar Clinic",
     address: "Sai Plaza, First Floor, B-Block Chauraha, Indira Nagar, Lucknow, Uttar Pradesh 226016",
     mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113945.66359633341!2d80.88422252876532!3d26.814432894590723!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399bfd5461a3c6ef%3A0xa435f4a57a838cb9!2sLiverCure%20Clinics%20Pvt%20Ltd.!5e0!3m2!1sen!2sin!4v1736549782483!5m2!1sen!2sin" 
-  },
-  {
-    name: "Near SGPGI Clinic",
-    address: "Shop No 1, Near SGPGI, Haibat Mau Mawaiya, Lucknow, Uttar Pradesh 226014",
-    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114012.00626786312!2d80.86665243906249!3d26.7483585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399bfbe13c5a3379%3A0x72d86ff8a493c11a!2sLiverCure!5e0!3m2!1sen!2sin!4v1736550110424!5m2!1sen!2sin"
   }
 ]
 
@@ -55,9 +50,9 @@ const LocationsSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Expert Liver Care at Two Convenient Locations
+          Expert Liver Care at a Convenient Location
         </motion.p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
           {locations.map((location, index) => (
             <motion.div
               key={index}
@@ -94,4 +89,3 @@ const LocationsSection = () => {
 }
 
 export default LocationsSection
-

@@ -12,10 +12,6 @@ export default function ContactPage() {
     {
       name: "Clinic 1",
       address: "Sai Plaza, First Floor, B-Block Chauraha, Indira Nagar, Lucknow UP, India, - 226016"
-    },
-    {
-      name: "Clinic 2",
-      address: "Shop No 1, Hotel Kunti International, Near SGPGI, Lucknow UP, India, 226014"
     }
   ]
 

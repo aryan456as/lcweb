@@ -13,7 +13,7 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {['Home', 'Services', 'About', 'Blog', 'Contact'].map((item) => (
+              {['Home', 'Services', 'About', 'Blog', 'Tools', 'Contact'].map((item) => (
                 <li key={item}>
                   <Link href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} className="text-gray-400 hover:text-white transition-colors">
                     {item}
@@ -46,4 +46,3 @@ const Footer = () => {
 }
 
 export default Footer
-
