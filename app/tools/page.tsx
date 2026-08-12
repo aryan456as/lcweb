@@ -1,16 +1,19 @@
 import type { Metadata } from 'next'
 import APRICalculator from '../../components/APRICalculator'
 import BMICalculator from '../../components/BMICalculator'
+import FIB4Calculator from '../../components/FIB4Calculator'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 
 export const metadata: Metadata = {
-  title: 'Free APRI & BMI Calculators | Liver Health Tools | LiverCure',
-  description: 'Use free APRI and BMI calculators online. Estimate the AST to Platelet Ratio Index for liver fibrosis and calculate adult body mass index privately on your device.',
+  title: 'Free APRI, FIB-4 & BMI Calculators | LiverCure',
+  description: 'Use free APRI, FIB-4, and BMI calculators online. Estimate liver fibrosis screening scores and adult body mass index privately on your device.',
   keywords: [
     'APRI calculator',
     'AST platelet ratio index calculator',
     'liver fibrosis calculator',
+    'FIB-4 calculator',
+    'fibrosis 4 score calculator',
     'BMI calculator',
     'body mass index calculator',
     'liver health tools',
@@ -20,8 +23,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'Free APRI & BMI Calculators | LiverCure',
-    description: 'Calculate APRI and adult BMI privately with free, easy-to-use clinical screening tools.',
+    title: 'Free APRI, FIB-4 & BMI Calculators | LiverCure',
+    description: 'Calculate APRI, FIB-4, and adult BMI privately with free, easy-to-use clinical screening tools.',
     type: 'website',
   },
 }
@@ -31,16 +34,25 @@ const structuredData = {
   '@graph': [
     {
       '@type': 'MedicalWebPage',
-      name: 'Free APRI and BMI Calculators',
-      description: 'Free online APRI and adult BMI calculators with formulas, interpretation ranges, and educational guidance.',
+      name: 'Free APRI, FIB-4, and BMI Calculators',
+      description: 'Free online APRI, FIB-4, and adult BMI calculators with formulas, interpretation ranges, and educational guidance.',
       about: [
         { '@type': 'MedicalTest', name: 'AST to Platelet Ratio Index (APRI)' },
+        { '@type': 'MedicalTest', name: 'Fibrosis-4 (FIB-4) score' },
         { '@type': 'MedicalTest', name: 'Body Mass Index (BMI)' },
       ],
     },
     {
       '@type': 'FAQPage',
       mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How is the FIB-4 score calculated?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'FIB-4 is calculated as age multiplied by AST, divided by platelet count multiplied by the square root of ALT.',
+          },
+        },
         {
           '@type': 'Question',
           name: 'What is the APRI score?',
@@ -70,7 +82,7 @@ const structuredData = {
           name: 'Are calculator values stored?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'No. Both calculators run in the browser, and entered values are not sent to or stored on a server.',
+            text: 'No. All three calculators run in the browser, and entered values are not sent to or stored on a server.',
           },
         },
       ],
@@ -89,10 +101,11 @@ export default function ToolsPage() {
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-[#FFA500]">Clinical tools</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight text-[#800000] md:text-6xl">Liver Health Calculators</h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-gray-600">
-              Free, private calculators that help you understand common clinical measurements. Estimate an APRI score for liver fibrosis assessment or calculate adult BMI.
+              Free, private calculators that help you understand common clinical measurements. Estimate APRI and FIB-4 liver fibrosis screening scores or calculate adult BMI.
             </p>
             <nav aria-label="Calculator links" className="mt-7 flex flex-wrap justify-center gap-3">
               <a href="#apri-calculator" className="rounded-full bg-[#800000] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#FFA500]">APRI Calculator</a>
+              <a href="#fib-4-calculator" className="rounded-full border border-[#800000]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#800000] transition hover:bg-[#800000]/5">FIB-4 Calculator</a>
               <a href="#bmi-calculator" className="rounded-full border border-[#800000]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#800000] transition hover:bg-[#800000]/5">BMI Calculator</a>
             </nav>
           </div>
@@ -110,6 +123,23 @@ export default function ToolsPage() {
             <ol className="mt-4 grid gap-3 leading-7">
               <li><strong>1. Enter AST:</strong> use the AST level shown on the blood test report in IU/L.</li>
               <li><strong>2. Enter the laboratory upper limit:</strong> use the AST upper limit of normal from the same report. If unavailable, 40 IU/L is commonly used in APRI studies.</li>
+              <li><strong>3. Enter platelet count:</strong> use the result expressed in 10⁹/L.</li>
+            </ol>
+          </article>
+
+          <div id="fib-4-calculator" className="scroll-mt-28">
+            <FIB4Calculator />
+          </div>
+
+          <article className="mx-auto my-14 max-w-4xl text-gray-700">
+            <h2 className="text-3xl font-black text-[#800000]">What is a FIB-4 calculator?</h2>
+            <p className="mt-4 leading-7">
+              The Fibrosis-4 score combines age, AST, ALT, and platelet count to estimate the likelihood of advanced liver fibrosis. It is a non-invasive screening calculation that can help clinicians decide whether additional fibrosis assessment may be appropriate.
+            </p>
+            <h3 className="mt-8 text-xl font-bold text-gray-900">How to use the FIB-4 calculator</h3>
+            <ol className="mt-4 grid gap-3 leading-7">
+              <li><strong>1. Enter age:</strong> use the patient’s age in years.</li>
+              <li><strong>2. Enter AST and ALT:</strong> use results from the same blood test in U/L.</li>
               <li><strong>3. Enter platelet count:</strong> use the result expressed in 10⁹/L.</li>
             </ol>
           </article>
@@ -134,8 +164,9 @@ export default function ToolsPage() {
               {[
                 ['What is the APRI score?', 'The AST to Platelet Ratio Index is a non-invasive estimate that uses AST, the AST upper limit of normal, and platelet count to help assess the likelihood of liver fibrosis or cirrhosis.'],
                 ['How is APRI calculated?', 'Divide AST by the AST upper limit of normal, divide that result by platelet count in 10⁹/L, and multiply by 100.'],
+                ['How is FIB-4 calculated?', 'Multiply age by AST, then divide by platelet count multiplied by the square root of ALT. Scores below 1.45 and above 3.25 were used as lower and upper cutoffs in the original validation study.'],
                 ['What is a healthy BMI for adults?', 'For most adults, a BMI from 18.5 to 24.9 is generally classified as a healthy weight range. BMI is a screening measure, not a diagnosis.'],
-                ['Are my calculator values stored?', 'No. APRI and BMI calculations happen in your browser. The values you enter are not submitted to or stored on a server.'],
+                ['Are my calculator values stored?', 'No. APRI, FIB-4, and BMI calculations happen in your browser. The values you enter are not submitted to or stored on a server.'],
               ].map(([question, answer]) => (
                 <div key={question} className="py-5 first:pt-0 last:pb-0">
                   <h3 className="text-lg font-bold text-gray-900">{question}</h3>
