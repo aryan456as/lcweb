@@ -4,16 +4,19 @@ import BMICalculator from '../../components/BMICalculator'
 import FIB4Calculator from '../../components/FIB4Calculator'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
+import TGHDLCalculator from '../../components/TGHDLCalculator'
 
 export const metadata: Metadata = {
-  title: 'Free APRI, FIB-4 & BMI Calculators | LiverCure',
-  description: 'Use free APRI, FIB-4, and BMI calculators online. Estimate liver fibrosis screening scores and adult body mass index privately on your device.',
+  title: 'Free APRI, FIB-4, TG/HDL & BMI Calculators | LiverCure',
+  description: 'Use free APRI, FIB-4, triglyceride to HDL ratio, and BMI calculators online. Estimate liver fibrosis scores, metabolic risk markers, and adult BMI privately on your device.',
   keywords: [
     'APRI calculator',
     'AST platelet ratio index calculator',
     'liver fibrosis calculator',
     'FIB-4 calculator',
     'fibrosis 4 score calculator',
+    'triglyceride HDL ratio calculator',
+    'TG/HDL ratio calculator',
     'BMI calculator',
     'body mass index calculator',
     'liver health tools',
@@ -23,8 +26,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'Free APRI, FIB-4 & BMI Calculators | LiverCure',
-    description: 'Calculate APRI, FIB-4, and adult BMI privately with free, easy-to-use clinical screening tools.',
+    title: 'Free APRI, FIB-4, TG/HDL & BMI Calculators | LiverCure',
+    description: 'Calculate APRI, FIB-4, triglyceride to HDL ratio, and adult BMI privately with free, easy-to-use clinical screening tools.',
     type: 'website',
   },
 }
@@ -34,11 +37,12 @@ const structuredData = {
   '@graph': [
     {
       '@type': 'MedicalWebPage',
-      name: 'Free APRI, FIB-4, and BMI Calculators',
-      description: 'Free online APRI, FIB-4, and adult BMI calculators with formulas, interpretation ranges, and educational guidance.',
+      name: 'Free APRI, FIB-4, TG/HDL, and BMI Calculators',
+      description: 'Free online APRI, FIB-4, triglyceride to HDL ratio, and adult BMI calculators with formulas, interpretation ranges, and educational guidance.',
       about: [
         { '@type': 'MedicalTest', name: 'AST to Platelet Ratio Index (APRI)' },
         { '@type': 'MedicalTest', name: 'Fibrosis-4 (FIB-4) score' },
+        { '@type': 'MedicalTest', name: 'Triglyceride to HDL cholesterol ratio' },
         { '@type': 'MedicalTest', name: 'Body Mass Index (BMI)' },
       ],
     },
@@ -71,6 +75,14 @@ const structuredData = {
         },
         {
           '@type': 'Question',
+          name: 'What is a good triglyceride to HDL ratio?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Using mg/dL values, a ratio below 2.0 is generally considered favourable. Ratios of about 3.0 and above have been associated with insulin resistance, and 4.0 or above with higher cardiometabolic risk.',
+          },
+        },
+        {
+          '@type': 'Question',
           name: 'What is a healthy BMI for adults?',
           acceptedAnswer: {
             '@type': 'Answer',
@@ -82,7 +94,7 @@ const structuredData = {
           name: 'Are calculator values stored?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'No. All three calculators run in the browser, and entered values are not sent to or stored on a server.',
+            text: 'No. All four calculators run in the browser, and entered values are not sent to or stored on a server.',
           },
         },
       ],
@@ -101,11 +113,12 @@ export default function ToolsPage() {
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-[#FFA500]">Clinical tools</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight text-[#800000] md:text-6xl">Liver Health Calculators</h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-gray-600">
-              Free, private calculators that help you understand common clinical measurements. Estimate APRI and FIB-4 liver fibrosis screening scores or calculate adult BMI.
+              Free, private calculators that help you understand common clinical measurements. Estimate APRI and FIB-4 liver fibrosis screening scores, check your triglyceride to HDL ratio, or calculate adult BMI.
             </p>
             <nav aria-label="Calculator links" className="mt-7 flex flex-wrap justify-center gap-3">
               <a href="#apri-calculator" className="rounded-full bg-[#800000] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#FFA500]">APRI Calculator</a>
               <a href="#fib-4-calculator" className="rounded-full border border-[#800000]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#800000] transition hover:bg-[#800000]/5">FIB-4 Calculator</a>
+              <a href="#tg-hdl-calculator" className="rounded-full border border-[#800000]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#800000] transition hover:bg-[#800000]/5">TG/HDL Ratio Calculator</a>
               <a href="#bmi-calculator" className="rounded-full border border-[#800000]/20 bg-white px-5 py-2.5 text-sm font-bold text-[#800000] transition hover:bg-[#800000]/5">BMI Calculator</a>
             </nav>
           </div>
@@ -144,6 +157,23 @@ export default function ToolsPage() {
             </ol>
           </article>
 
+          <div id="tg-hdl-calculator" className="scroll-mt-28">
+            <TGHDLCalculator />
+          </div>
+
+          <article className="mx-auto my-14 max-w-4xl text-gray-700">
+            <h2 className="text-3xl font-black text-[#800000]">What is the triglyceride to HDL ratio?</h2>
+            <p className="mt-4 leading-7">
+              The triglyceride to HDL ratio divides your triglyceride level by your HDL (good) cholesterol level. A higher ratio has been linked with insulin resistance, small dense LDL particles, and fatty liver disease. It is a simple marker that can be calculated from a routine lipid profile.
+            </p>
+            <h3 className="mt-8 text-xl font-bold text-gray-900">How to use the TG/HDL ratio calculator</h3>
+            <ol className="mt-4 grid gap-3 leading-7">
+              <li><strong>1. Choose units:</strong> select mg/dL or mmol/L to match your lab report.</li>
+              <li><strong>2. Enter triglycerides:</strong> use a fasting result if available.</li>
+              <li><strong>3. Enter HDL cholesterol:</strong> use the result from the same lipid profile.</li>
+            </ol>
+          </article>
+
           <div id="bmi-calculator" className="scroll-mt-28">
             <BMICalculator />
           </div>
@@ -165,8 +195,9 @@ export default function ToolsPage() {
                 ['What is the APRI score?', 'The AST to Platelet Ratio Index is a non-invasive estimate that uses AST, the AST upper limit of normal, and platelet count to help assess the likelihood of liver fibrosis or cirrhosis.'],
                 ['How is APRI calculated?', 'Divide AST by the AST upper limit of normal, divide that result by platelet count in 10⁹/L, and multiply by 100.'],
                 ['How is FIB-4 calculated?', 'Multiply age by AST, then divide by platelet count multiplied by the square root of ALT. Scores below 1.45 and above 3.25 were used as lower and upper cutoffs in the original validation study.'],
+                ['What is a good triglyceride to HDL ratio?', 'Using mg/dL values, a ratio below 2.0 is generally considered favourable. Ratios of about 3.0 and above have been linked with insulin resistance, and 4.0 or above with higher cardiometabolic risk.'],
                 ['What is a healthy BMI for adults?', 'For most adults, a BMI from 18.5 to 24.9 is generally classified as a healthy weight range. BMI is a screening measure, not a diagnosis.'],
-                ['Are my calculator values stored?', 'No. APRI, FIB-4, and BMI calculations happen in your browser. The values you enter are not submitted to or stored on a server.'],
+                ['Are my calculator values stored?', 'No. APRI, FIB-4, TG/HDL, and BMI calculations happen in your browser. The values you enter are not submitted to or stored on a server.'],
               ].map(([question, answer]) => (
                 <div key={question} className="py-5 first:pt-0 last:pb-0">
                   <h3 className="text-lg font-bold text-gray-900">{question}</h3>
